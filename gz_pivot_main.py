@@ -1,9 +1,7 @@
-import os
 import bpy
+import os
 import math
 import mathutils
-
-
 
 from bpy.utils import ( register_class, 
                         unregister_class
@@ -105,7 +103,7 @@ def setPivotCorners(self, btn_id):
         ### Multiply World Matrix by BBox corners
         bbox = [obj.matrix_world @ Vector(corner) for corner in obj.bound_box]
         
-        ### Sortered points by index 
+        ### Sort points by index 
         '''
         C0 = ( bbox[0].x - posx, bbox[0].y - posy, bbox[0].z - posz )
         C1 = ( bbox[1].x - posx, bbox[1].y - posy, bbox[1].z - posz )
@@ -116,7 +114,7 @@ def setPivotCorners(self, btn_id):
         C6 = ( bbox[6].x - posx, bbox[6].y - posy, bbox[6].z - posz )
         C7 = ( bbox[7].x - posx, bbox[7].y - posy, bbox[7].z - posz )
         '''
-        ### Sortered points by face location
+        ### Sort points by face location
         C0 = ( bbox[0].x - posx, bbox[0].y - posy, bbox[0].z - posz )
         C1 = ( bbox[4].x - posx, bbox[4].y - posy, bbox[4].z - posz )
         C2 = ( bbox[7].x - posx, bbox[7].y - posy, bbox[7].z - posz )
@@ -179,6 +177,7 @@ def setPivotCenters(self, btn_id):
         ### Multiply World Matrix by BBox corners
         bbox = [obj.matrix_world @ Vector(corner) for corner in obj.bound_box]
         
+        ### Find center for each BBox face
         FC0 = ( (bbox[0].x + bbox[2].x) / 2 - posx, (bbox[0].y + bbox[2].y) / 2 - posy, (bbox[0].z + bbox[2].z) / 2 - posz )
         FC1 = ( (bbox[4].x + bbox[1].x) / 2 - posx, (bbox[4].y + bbox[1].y) / 2 - posy, (bbox[4].z + bbox[1].z) / 2 - posz )
         FC2 = ( (bbox[7].x + bbox[0].x) / 2 - posx, (bbox[7].y + bbox[0].y) / 2 - posy, (bbox[7].z + bbox[0].z) / 2 - posz )
@@ -264,6 +263,7 @@ def clearSRL(btn_id):
         obj.location = (0,0,0)
         obj.rotation_euler = (0,0,0)
         obj.scale = (1,1,1)
+
 
 
 

@@ -1,7 +1,6 @@
 import bpy
 
 from bpy.types import Operator
-
 from .gz_pivot_main import *
 
 
@@ -10,7 +9,7 @@ from .gz_pivot_main import *
                      OPERATORS
     
 '''''''''''''''''''''''''''''''''''''''''''''''''''''
-#Pivot To Corners OPs
+### Pivot To Corners OPs
 class C0(bpy.types.Operator):
     bl_idname = "object.c0"
     bl_label = "C0"
@@ -108,7 +107,7 @@ class C7(bpy.types.Operator):
     
     
 
-#Pivot To Centers OPs
+### Pivot To Centers OPs
 class FC0(bpy.types.Operator):
     bl_idname = "object.fc0"
     bl_label = "FC0"
@@ -131,6 +130,7 @@ class FC1(bpy.types.Operator):
         checkSelected(self, context)
         setPivotCenters(self, self.btn_id)
         return {'FINISHED'}
+ 
     
 class FC2(bpy.types.Operator):
     bl_idname = "object.fc2"
@@ -143,6 +143,7 @@ class FC2(bpy.types.Operator):
         setPivotCenters(self, self.btn_id)
         return {'FINISHED'}
 
+
 class FC3(bpy.types.Operator):
     bl_idname = "object.fc3"
     bl_label = "FC3"
@@ -153,7 +154,8 @@ class FC3(bpy.types.Operator):
         checkSelected(self, context)
         setPivotCenters(self, self.btn_id)
         return {'FINISHED'}
-    
+
+
 class FC4(bpy.types.Operator):
     bl_idname = "object.fc4"
     bl_label = "FC4"
@@ -164,6 +166,7 @@ class FC4(bpy.types.Operator):
         checkSelected(self, context)
         setPivotCenters(self, self.btn_id)
         return {'FINISHED'}
+
 
 class FC5(bpy.types.Operator):
     bl_idname = "object.fc5"
@@ -200,6 +203,7 @@ class CenterMass(bpy.types.Operator):
         setPivotCenter(self.btn_id)
         return {'FINISHED'}
 
+
 class Cursor(bpy.types.Operator):
     bl_idname = "object.cursor"
     bl_label = "3D Cursor"
@@ -222,6 +226,3 @@ class ClearSRL(bpy.types.Operator):
         checkSelected(self, context)
         clearSRL(self.btn_id)
         return {'FINISHED'}
-    
-
-

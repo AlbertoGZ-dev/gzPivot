@@ -14,7 +14,7 @@
 bl_info = {
     "name" : "GZ Pivot",
     "author" : "AlbertoGZ",
-    "description" : "",
+    "description" : "Set origin to objects in easy and quick way.",
     "blender" : (2, 80, 0),
     "version" : (0, 0, 1),
     "location" : "View3D",
@@ -32,7 +32,6 @@ from bpy.utils import ( register_class,
 
 from .gz_pivot_main import *
 from .gz_pivot_panels import *
-#from .gz_pivot_ops import *
 
 
 ''''''''''''''''''''''''''''''''''''''''''''''''''''
@@ -56,8 +55,8 @@ def register():
     import bpy.utils.previews
     pcoll = bpy.utils.previews.new()
 
-    # path to the folder where the icon isΩ
-    # the path is calculated relative to this py file inside the addon folder
+    # Path to the folder where the icons are.
+    # The path is calculated relative to this py file inside the addon folder
     script_path = os.path.abspath(__file__) 
     path_list = script_path.split(os.sep)
     script_directory = path_list[0:len(path_list)-1]
@@ -66,8 +65,7 @@ def register():
 
     print("ICONS DIRECTORY = " + icons_dir)
    
-    # load a preview thumbnail of a file and store in the previews collection
-    
+    # load a preview thumbnail of a file and store in the previews collection 
     pcoll.load("corner_0", os.path.join(icons_dir, "corner_0.png"), 'IMAGE')
     pcoll.load("corner_1", os.path.join(icons_dir, "corner_1.png"), 'IMAGE')
     pcoll.load("corner_2", os.path.join(icons_dir, "corner_2.png"), 'IMAGE')
@@ -113,6 +111,7 @@ def register():
     
     bpy.utils.register_class(Cursor)
     bpy.utils.register_class(ClearSRL)
+
 
 def unregister():
     #
