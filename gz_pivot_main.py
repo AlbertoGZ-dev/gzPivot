@@ -1,7 +1,9 @@
+from cProfile import label
 import bpy
 import os
 import math
 import mathutils
+import functools
 
 from bpy.utils import ( register_class, 
                         unregister_class
@@ -82,138 +84,151 @@ class PREFS_PT_MyPrefs( AddonPreferences ):
                     FUNCTIONS
     
 '''''''''''''''''''''''''''''''''''''''''''''''''''''
-
 def setPivotCorners(self, btn_id): 
     
     sel = bpy.context.selected_objects
-    obj = bpy.context.active_object
-    posx = obj.location.x
-    posy = obj.location.y
-    posz = obj.location.z
+    obj_act = bpy.context.active_object
     pivotPos = (0,0,0)
     
     msg2 = "You have selected " + str(len(sel)) + " items. " + "Please select only 1 object"     
     
+    # Prevent in more than 1 object at same time. 
+    # Pending rebuild this to works in multiple-selection
     if len(sel) >= 2:
         print(msg2)
         self.report({"ERROR"}, msg2)
     
     else:
 
-        ### Multiply World Matrix by BBox corners
-        bbox = [obj.matrix_world @ Vector(corner) for corner in obj.bound_box]
-        
-        ### Sort points by index 
-        '''
-        C0 = ( bbox[0].x - posx, bbox[0].y - posy, bbox[0].z - posz )
-        C1 = ( bbox[1].x - posx, bbox[1].y - posy, bbox[1].z - posz )
-        C2 = ( bbox[2].x - posx, bbox[2].y - posy, bbox[2].z - posz )
-        C3 = ( bbox[3].x - posx, bbox[3].y - posy, bbox[3].z - posz )
-        C4 = ( bbox[4].x - posx, bbox[4].y - posy, bbox[4].z - posz )
-        C5 = ( bbox[5].x - posx, bbox[5].y - posy, bbox[5].z - posz )
-        C6 = ( bbox[6].x - posx, bbox[6].y - posy, bbox[6].z - posz )
-        C7 = ( bbox[7].x - posx, bbox[7].y - posy, bbox[7].z - posz )
-        '''
-        ### Sort points by face location
-        C0 = ( bbox[0].x - posx, bbox[0].y - posy, bbox[0].z - posz )
-        C1 = ( bbox[4].x - posx, bbox[4].y - posy, bbox[4].z - posz )
-        C2 = ( bbox[7].x - posx, bbox[7].y - posy, bbox[7].z - posz )
-        C3 = ( bbox[3].x - posx, bbox[3].y - posy, bbox[3].z - posz )
-        C4 = ( bbox[1].x - posx, bbox[1].y - posy, bbox[1].z - posz )
-        C5 = ( bbox[5].x - posx, bbox[5].y - posy, bbox[5].z - posz )
-        C6 = ( bbox[6].x - posx, bbox[6].y - posy, bbox[6].z - posz )
-        C7 = ( bbox[2].x - posx, bbox[2].y - posy, bbox[2].z - posz )
-               
-        ### Selection pivotPos from button
-        if btn_id == "btn_c0":
-            pivotPos = C0
+        for obj in sel:
 
-        if btn_id == "btn_c1":
-            pivotPos = C1
-        
-        if btn_id == "btn_c2":
-            pivotPos = C2
+            posx = obj.location.x
+            posy = obj.location.y
+            posz = obj.location.z
+
+            ### Multiply World Matrix by BBox corners
+            bbox = [obj.matrix_world @ Vector(corner) for corner in obj.bound_box]
             
-        if btn_id == "btn_c3":
-            pivotPos = C3
+            ### Sort points by default index 
+            '''
+            C0 = ( bbox[0].x - posx, bbox[0].y - posy, bbox[0].z - posz )
+            C1 = ( bbox[1].x - posx, bbox[1].y - posy, bbox[1].z - posz )
+            C2 = ( bbox[2].x - posx, bbox[2].y - posy, bbox[2].z - posz )
+            C3 = ( bbox[3].x - posx, bbox[3].y - posy, bbox[3].z - posz )
+            C4 = ( bbox[4].x - posx, bbox[4].y - posy, bbox[4].z - posz )
+            C5 = ( bbox[5].x - posx, bbox[5].y - posy, bbox[5].z - posz )
+            C6 = ( bbox[6].x - posx, bbox[6].y - posy, bbox[6].z - posz )
+            C7 = ( bbox[7].x - posx, bbox[7].y - posy, bbox[7].z - posz )
+            '''
+            ### Sort points by custom face location
+            C0 = ( bbox[0].x - posx, bbox[0].y - posy, bbox[0].z - posz )
+            C1 = ( bbox[4].x - posx, bbox[4].y - posy, bbox[4].z - posz )
+            C2 = ( bbox[7].x - posx, bbox[7].y - posy, bbox[7].z - posz )
+            C3 = ( bbox[3].x - posx, bbox[3].y - posy, bbox[3].z - posz )
+            C4 = ( bbox[1].x - posx, bbox[1].y - posy, bbox[1].z - posz )
+            C5 = ( bbox[5].x - posx, bbox[5].y - posy, bbox[5].z - posz )
+            C6 = ( bbox[6].x - posx, bbox[6].y - posy, bbox[6].z - posz )
+            C7 = ( bbox[2].x - posx, bbox[2].y - posy, bbox[2].z - posz )
+                
+            ### Selection pivotPos from button
+            if btn_id == "btn_c0":
+                pivotPos = C0
+
+            if btn_id == "btn_c1":
+                pivotPos = C1
             
-        if btn_id == "btn_c4":
-            pivotPos = C4
-        
-        if btn_id == "btn_c5":
-            pivotPos = C5
-        
-        if btn_id == "btn_c6":
-            pivotPos = C6
-        
-        if btn_id == "btn_c7":
-            pivotPos = C7
+            if btn_id == "btn_c2":
+                pivotPos = C2
+                
+            if btn_id == "btn_c3":
+                pivotPos = C3
+                
+            if btn_id == "btn_c4":
+                pivotPos = C4
             
-        ### Set origin with pivotPos
-        bpy.context.scene.tool_settings.use_transform_data_origin = True
-        bpy.ops.transform.translate(value=pivotPos)
-        bpy.context.scene.tool_settings.use_transform_data_origin = False
-        
+            if btn_id == "btn_c5":
+                pivotPos = C5
+            
+            if btn_id == "btn_c6":
+                pivotPos = C6
+            
+            if btn_id == "btn_c7":
+                pivotPos = C7
+   
+            ### Set origin with pivotPos
+            bpy.context.scene.tool_settings.use_transform_data_origin = True
+            bpy.ops.transform.translate(value=pivotPos)
+            bpy.context.scene.tool_settings.use_transform_data_origin = False 
+            
+            ### Show BBox during a short time
+            showBBoxTemp()
+            
+            
+
+
 
 
 
 def setPivotCenters(self, btn_id): 
     
     sel = bpy.context.selected_objects
-    obj = bpy.context.active_object
-    posx = obj.location.x
-    posy = obj.location.y
-    posz = obj.location.z
+    obj_act = bpy.context.active_object
+   
     pivotPos = (0,0,0)
     
     msg2 = "You have selected " + str(len(sel)) + " items. " + "Please select only 1 object"     
     
-    if len(sel) >= 2:
+    # Prevent in more than 1 object at same time. 
+    # Pending rebuild this to works in multiple-selection
+    if len(sel) >= 2: 
         print(msg2)
         self.report({"ERROR"}, msg2)
     
     else:
 
-        ### Multiply World Matrix by BBox corners
-        bbox = [obj.matrix_world @ Vector(corner) for corner in obj.bound_box]
-        
-        ### Find center for each BBox face
-        FC0 = ( (bbox[0].x + bbox[2].x) / 2 - posx, (bbox[0].y + bbox[2].y) / 2 - posy, (bbox[0].z + bbox[2].z) / 2 - posz )
-        FC1 = ( (bbox[4].x + bbox[1].x) / 2 - posx, (bbox[4].y + bbox[1].y) / 2 - posy, (bbox[4].z + bbox[1].z) / 2 - posz )
-        FC2 = ( (bbox[7].x + bbox[0].x) / 2 - posx, (bbox[7].y + bbox[0].y) / 2 - posy, (bbox[7].z + bbox[0].z) / 2 - posz )
-        FC3 = ( (bbox[3].x + bbox[6].x) / 2 - posx, (bbox[3].y + bbox[6].y) / 2 - posy, (bbox[3].z + bbox[6].z) / 2 - posz )
-        FC4 = ( (bbox[1].x + bbox[3].x) / 2 - posx, (bbox[1].y + bbox[3].y) / 2 - posy, (bbox[1].z + bbox[3].z) / 2 - posz )
-        FC5 = ( (bbox[5].x + bbox[2].x) / 2 - posx, (bbox[5].y + bbox[2].y) / 2 - posy, (bbox[5].z + bbox[2].z) / 2 - posz )
-    
-        ### Selection pivotPos from button
-        if btn_id == "btn_fc0":
-            print(btn_id)
-            pivotPos = FC0
+        for obj in sel:
 
-        if btn_id == "btn_fc1":
-            print(btn_id)
-            pivotPos = FC1
-        
-        if btn_id == "btn_fc2":
-            print(btn_id)
-            pivotPos = FC2
-           
-        if btn_id == "btn_fc3":
-            print(btn_id)
-            pivotPos = FC3
+            posx = obj.location.x
+            posy = obj.location.y
+            posz = obj.location.z
+
+            ### Multiply World Matrix by BBox corners
+            bbox = [obj.matrix_world @ Vector(corner) for corner in obj.bound_box]
             
-        if btn_id == "btn_fc4":
-            print(btn_id)
-            pivotPos = FC4
+            ### Find center for each BBox face
+            FC0 = ( (bbox[0].x + bbox[2].x) / 2 - posx, (bbox[0].y + bbox[2].y) / 2 - posy, (bbox[0].z + bbox[2].z) / 2 - posz )
+            FC1 = ( (bbox[4].x + bbox[1].x) / 2 - posx, (bbox[4].y + bbox[1].y) / 2 - posy, (bbox[4].z + bbox[1].z) / 2 - posz )
+            FC2 = ( (bbox[7].x + bbox[0].x) / 2 - posx, (bbox[7].y + bbox[0].y) / 2 - posy, (bbox[7].z + bbox[0].z) / 2 - posz )
+            FC3 = ( (bbox[3].x + bbox[6].x) / 2 - posx, (bbox[3].y + bbox[6].y) / 2 - posy, (bbox[3].z + bbox[6].z) / 2 - posz )
+            FC4 = ( (bbox[1].x + bbox[3].x) / 2 - posx, (bbox[1].y + bbox[3].y) / 2 - posy, (bbox[1].z + bbox[3].z) / 2 - posz )
+            FC5 = ( (bbox[5].x + bbox[2].x) / 2 - posx, (bbox[5].y + bbox[2].y) / 2 - posy, (bbox[5].z + bbox[2].z) / 2 - posz )
         
-        if btn_id == "btn_fc5":
-            print(btn_id)
-            pivotPos = FC5
-          
-        ### Set origin with pivotPos
-        bpy.context.scene.tool_settings.use_transform_data_origin = True
-        bpy.ops.transform.translate(value=pivotPos)
-        bpy.context.scene.tool_settings.use_transform_data_origin = False
+            ### Selection pivotPos from button
+            if btn_id == "btn_fc0":
+                pivotPos = FC0
+
+            if btn_id == "btn_fc1":
+                pivotPos = FC1
+            
+            if btn_id == "btn_fc2":
+                pivotPos = FC2
+            
+            if btn_id == "btn_fc3":
+                pivotPos = FC3
+                
+            if btn_id == "btn_fc4":
+                pivotPos = FC4
+            
+            if btn_id == "btn_fc5":
+                pivotPos = FC5
+            
+            ### Set origin with pivotPos
+            bpy.context.scene.tool_settings.use_transform_data_origin = True
+            bpy.ops.transform.translate(value=pivotPos)
+            bpy.context.scene.tool_settings.use_transform_data_origin = False
+
+            ### Show BBox during a short time
+            showBBoxTemp()
         
         
 
@@ -221,8 +236,12 @@ def setPivotCenters(self, btn_id):
 def setPivotCenter(btn_id): 
     
     sel = bpy.context.selected_objects
+
+    ### Show BBox during a few time
+    showBBoxTemp()
     
     for obj in sel:
+        obj.show_bounds = True
         if btn_id == "centerBounds":
             bpy.ops.object.origin_set(type='ORIGIN_GEOMETRY', center='BOUNDS')
         
@@ -266,6 +285,27 @@ def clearSRL(btn_id):
 
 
 
+def showBBox(self, context):
+    show_bbox = bpy.context.scene.my_tool.showBBox
+    sel = bpy.context.selected_objects
+    for obj in sel:
+        if show_bbox == True:
+            obj.show_bounds = True
+        else:
+            obj.show_bounds = False
+
+
+def showBBoxTemp(x = 0):
+    bpy.context.object.show_bounds = False
+    x += 1
+    if(x < 2): # Run after 1 second
+        bpy.app.timers.register(functools.partial(showBBoxTemp,x), first_interval=1)
+        bpy.context.object.show_bounds = True
+
+
+
+
+
 
 '''''''''''''''''''''''''''''''''''''''''''''''''''''
     
@@ -283,6 +323,13 @@ class PG_MyProperties (PropertyGroup):
         default = 'global',
         description = "Set transforms orientation to",
         update = transformsOri
+    )
+
+    showBBox : BoolProperty(
+        name = "Show/Hide BBox",
+        description = "Show/Hide bounding box for all selected objects",
+        default = False,
+        update = showBBox
     )
     
     

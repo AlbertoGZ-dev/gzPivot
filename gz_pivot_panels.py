@@ -1,3 +1,4 @@
+from ctypes import alignment
 import bpy
 import textwrap
 
@@ -36,12 +37,19 @@ class OBJECT_PT_MyPanel (Panel):
         mytool = scene.my_tool
         pcoll = preview_collections["main"]
         
-        row0 = layout.grid_flow(columns=4, row_major=True, align=True)
-        row0.scale_y = 1.5
-        row0.prop(mytool, 'transformOri', expand=True)
-        
+        row0 = layout.row()
+        row0.alert = True
+        row0.label(text="Note: Use Global to Set Origin")
+
         row1 = layout.grid_flow(columns=4, row_major=True, align=True)
-        row1.operator(ClearSRL.bl_idname, text="Clear SRL")
+        row1.scale_y = 1.5
+        row1.prop(mytool, 'transformOri', expand=True)
+       
+        row2 = layout.grid_flow(columns=4, row_major=True, align=True)
+        row2.operator(ClearSRL.bl_idname, text="Reset Loc.Rot.Scl")
+
+        row3 = layout.grid_flow(columns=4, row_major=True, align=True)
+        row3.prop(mytool, "showBBox", toggle=True)
         
 
  
@@ -111,6 +119,7 @@ class SUBPANEL_PT_PivotToCenters (Panel):
     bl_space_type = "VIEW_3D"
     bl_region_type = "UI"
     bl_parent_id = "OBJECT_PT_MyPanel"
+    
     
     def draw(self, context):
         layout = self.layout
@@ -182,6 +191,7 @@ class SUBPANEL_PT_About (Panel):
     bl_label = "About"
     bl_space_type = "VIEW_3D"
     bl_region_type = "UI"
+    bl_options = {"DEFAULT_CLOSED"}
     bl_parent_id = "OBJECT_PT_MyPanel"
     
     def draw(self, context):
@@ -190,16 +200,31 @@ class SUBPANEL_PT_About (Panel):
         mytool = scene.my_tool
         
         ### About
-        row90 = layout.grid_flow(columns=2, row_major=True, align=True)
+        row90 = layout.row(align=True)
+        row90.alignment = 'CENTER'
         row90.label(text="GZ Pivot v0.0.1")
-        row90.label(text="by Alberto GZ")
-        row90.separator()
+
+        row91 = layout.row(align=True)
+        row91.alignment = 'CENTER'
+        row91.label(text="by Alberto GZ")
+        row91.separator()
         #
-        row91 = layout.grid_flow(columns=1, row_major=True, align=True)
-        textTowrap = "GZ Pivot helps to set origin quickly on objects"      
-        wrapp = textwrap.TextWrapper(width=30) #50 = maximum length       
-        wList = wrapp.wrap(text=textTowrap) 
-        #
-        for text in wList: 
-            row91.alignment = 'CENTER'
-            row91.label(text=text)
+        row92 = layout.row(align=True)
+        text = "This tool helps to set origin on objects in easy and quick way"      
+        
+        def label_multiline(context, text, parent):
+            chars = int(context.region.width / 13)
+            wrapper = textwrap.TextWrapper(width=chars)
+            text_lines = wrapper.wrap(text=text)
+            for text_line in text_lines:
+                parent.label(text=text_line)
+
+        label_multiline(
+            context=context,
+            text=text,
+            parent=layout
+        )
+
+
+        
+       

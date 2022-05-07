@@ -219,7 +219,7 @@ class Cursor(bpy.types.Operator):
 class ClearSRL(bpy.types.Operator):
     bl_idname = "object.clearsrl"
     bl_label = "Clear SRL"
-    bl_description = "Reset Scale to 1, Rotation and Location to 0,0,0"
+    bl_description = "Reset Location and Rotation to 0,0,0. Reset Scale to 1"
     btn_id = "clear_srl"
 
     def execute(self, context):
