@@ -110,8 +110,8 @@ class SUBPANEL_PT_PivotToCorners (Panel):
         
 preview_collections = {}        
         
-             
-        
+
+
                   
 class SUBPANEL_PT_PivotToCenters (Panel):
     bl_idname = "SUBPANEL_PT_PivotToCenters"
@@ -164,6 +164,7 @@ class SUBPANEL_PT_PivotToCenters (Panel):
         
         row25.operator(CenterBounds.bl_idname, text="Center (bounds)")
         row25.operator(CenterMass.bl_idname, text="Center (mass)")
+
 
         
 

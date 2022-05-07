@@ -84,6 +84,7 @@ class PREFS_PT_MyPrefs( AddonPreferences ):
                     FUNCTIONS
     
 '''''''''''''''''''''''''''''''''''''''''''''''''''''
+
 def setPivotCorners(self, btn_id): 
     
     sel = bpy.context.selected_objects
@@ -164,8 +165,6 @@ def setPivotCorners(self, btn_id):
             showBBoxTemp()
             
             
-
-
 
 
 
