@@ -121,9 +121,6 @@ def register():
 
    
 
-
-
-
 def unregister():
     #
     for cls in reversed(classes):
@@ -168,7 +165,3 @@ if __name__ == '__main__':
     register()
 
     bpy.ops.wm.modal_timer_operator()
-
-
-
-    

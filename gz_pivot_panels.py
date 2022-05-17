@@ -1,8 +1,8 @@
-from ast import Global
-from ctypes import alignment
 import bpy
 import textwrap
 
+from ast import Global
+from ctypes import alignment
 from bpy.types import Panel
 from .gz_pivot_ops import *
 

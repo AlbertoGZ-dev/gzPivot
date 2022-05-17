@@ -1,4 +1,3 @@
-
 from sre_parse import State
 import bpy
 import functools
@@ -28,8 +27,6 @@ from mathutils import ( Vector,
                         )
 
 from bpy_extras.io_utils import axis_conversion
-
-
 
 
 
@@ -186,7 +183,7 @@ def checkSelected(self):
         state = 'NONE' 
     
     elif len(sel) >= 2:
-        self.report({'ERROR'}, 'You have selected ' + str(len(sel)) + ' items. ' + 'Maybe works with only 1 object')
+        self.report({'ERROR'}, 'You have selected ' + str(len(sel)) + ' items. ' + 'It works with only 1 object')
         state = 'LOCK' 
 
     elif len(sel) == 1:
@@ -541,9 +538,6 @@ def showFaceCenterPointsId(self, context):
     
 
 
-
-
-
 '''''''''''''''''''''''''''''''''''''''''''''''''''''
     
         PROPERTIES VISIBLE IN THE ADDON-PANEL
@@ -585,7 +579,7 @@ class PG_MyProperties (bpy.types.PropertyGroup):
         default = False,
         update = showFaceCenterPointsId
     )
-    '''
+    
     
     pivotToCenters1 : bpy.props.EnumProperty(
         items=[
@@ -602,3 +596,4 @@ class PG_MyProperties (bpy.types.PropertyGroup):
             ('5', '5', '', '', 2)
         ],
     )
+    '''

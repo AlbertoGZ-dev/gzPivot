@@ -1,7 +1,8 @@
-from multiprocessing import context
 import bpy
 
+from multiprocessing import context
 from bpy.types import Operator
+
 from .gz_pivot_main import *
 
 
