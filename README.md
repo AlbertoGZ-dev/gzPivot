@@ -7,7 +7,7 @@ https://user-images.githubusercontent.com/65370611/168981759-e846211d-2330-4411-
 
 ## How to install
 1. [Download GZPivot](https://github.com/AlbertoGZ-dev/GZ_Pivot/archive/refs/heads/master.zip) package from link here or going to Github project > Code > Download ZIP
-2. Open Blender preferences > add-ons, click on Install, then find downloaded .zip package.
+2. Open Blender Preferences > Add-ons, click on Install, then find downloaded .zip package.
 
 
 ## How to use it
