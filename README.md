@@ -18,4 +18,4 @@ GZ Pivot works on object mode, so select any object in the scene, then Side Pane
 - Ability to set origin for mutiple object selection, per-object-basis and per-group-basis.
 - Set pivot to bounding box edge middles.
 - Add interactive mode to set origin in the viewport by gizmo handler with snap.
-- Wished replace buttons with icons as soon as possible to control the icon size in the button operator type.
+- Wished replacing buttons with icons as soon as possible to control the icon size in the button operator type.
