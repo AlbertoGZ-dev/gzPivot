@@ -33,6 +33,7 @@ from bpy.utils import ( register_class,
 
 from .gz_pivot_main import *
 from .gz_pivot_panels import *
+from .gz_pivot_ops import cornerBtn
 
 
 ''''''''''''''''''''''''''''''''''''''''''''''''''''
@@ -56,7 +57,6 @@ classes = (
 def register():
     import bpy.utils.previews
     pcoll = bpy.utils.previews.new()
-
 
     # Path to the folder where the icons are.
     # The path is calculated relative to this py file inside the addon folder
@@ -87,28 +87,14 @@ def register():
     
     preview_collections['main'] = pcoll
     
-    
     #
     for cls in classes:
         register_class(cls)
     #
     bpy.types.Scene.my_tool = PointerProperty(type=PG_MyProperties)
 
-    bpy.utils.register_class(C0)
-    bpy.utils.register_class(C1)
-    bpy.utils.register_class(C2)
-    bpy.utils.register_class(C3)
-    bpy.utils.register_class(C4)
-    bpy.utils.register_class(C5)
-    bpy.utils.register_class(C6)
-    bpy.utils.register_class(C7)
-    
-    bpy.utils.register_class(FC0)
-    bpy.utils.register_class(FC1)
-    bpy.utils.register_class(FC2)
-    bpy.utils.register_class(FC3)
-    bpy.utils.register_class(FC4)
-    bpy.utils.register_class(FC5)
+    bpy.utils.register_class(cornerBtn)
+    bpy.utils.register_class(centerBtn)
     bpy.utils.register_class(CenterBounds)
     bpy.utils.register_class(CenterMass)
     
@@ -128,21 +114,9 @@ def unregister():
     #
     del bpy.types.Scene.my_tool  # remove PG_MyProperties
 
-    bpy.utils.unregister_class(C0)
-    bpy.utils.unregister_class(C1)
-    bpy.utils.unregister_class(C2)
-    bpy.utils.unregister_class(C3)
-    bpy.utils.unregister_class(C4)
-    bpy.utils.unregister_class(C5)
-    bpy.utils.unregister_class(C6)
-    bpy.utils.unregister_class(C7)
+    bpy.utils.unregister_class(cornerBtn)
+    bpy.utils.unregister_class(centerBtn)
     
-    bpy.utils.unregister_class(FC0)
-    bpy.utils.unregister_class(FC1)
-    bpy.utils.unregister_class(FC2)
-    bpy.utils.unregister_class(FC3)
-    bpy.utils.unregister_class(FC4)
-    bpy.utils.unregister_class(FC5)
     bpy.utils.unregister_class(CenterBounds)
     bpy.utils.unregister_class(CenterMass)
     
@@ -152,7 +126,6 @@ def unregister():
     bpy.utils.unregister_class(showBBoxBtn)
     bpy.utils.unregister_class(showCornerPointsBtn)
     bpy.utils.unregister_class(showCenterPointsBtn)
-
 
 
     for pcoll in preview_collections.values():

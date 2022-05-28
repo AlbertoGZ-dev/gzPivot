@@ -24,21 +24,15 @@ class OBJECT_PT_MyPanel (Panel):
     bl_context = 'objectmode'
    
     
-
-    '''
-    def __init(self):
-        super( self, Panel ).__init__()
-        bl_category = bpy.context.preferences.addons[__name__].preferences.category 
-    '''
+    # def __init(self):
+    #     super( self, Panel ).__init__()
+    #     bl_category = bpy.context.preferences.addons[__name__].preferences.category 
     
-    
-    
-    @classmethod
-    def poll(self,context):
-        return context.object is not None
+    # @classmethod
+    # def poll(self,context):
+    #     return context.object is not None
 
     
-        
     def draw(self, context):
         layout = self.layout
         layout.scale_x = 10
@@ -74,12 +68,13 @@ class SUBPANEL_PT_PivotToCorners (Panel):
     bl_region_type = 'UI'
     bl_parent_id = 'OBJECT_PT_MyPanel'
     
+    
     def draw(self, context):
         layout = self.layout
         scene = context.scene
         mytool = scene.my_tool
         pcoll = preview_collections['main']
-        
+
         ### Icons collection
         corner_0 = pcoll['corner_0']
         corner_1 = pcoll['corner_1']
@@ -100,14 +95,14 @@ class SUBPANEL_PT_PivotToCorners (Panel):
         
         row12 = layout.grid_flow(columns=4, row_major=True, align=True)
         row12.scale_y = 1.0
-        row12.operator(C4.bl_idname, text='4', emboss=True)
-        row12.operator(C5.bl_idname, text='5', emboss=True)
-        row12.operator(C6.bl_idname, text='6', emboss=True)
-        row12.operator(C7.bl_idname, text='7', emboss=True)
-        row12.operator(C0.bl_idname, text='0', emboss=True)
-        row12.operator(C1.bl_idname, text='1', emboss=True)
-        row12.operator(C2.bl_idname, text='2', emboss=True)
-        row12.operator(C3.bl_idname, text='3', emboss=True)
+        row12.operator('object.corner_btn', text='4').btn_id = 'btn_c4'
+        row12.operator('object.corner_btn', text='5').btn_id = 'btn_c5'
+        row12.operator('object.corner_btn', text='6').btn_id = 'btn_c6'
+        row12.operator('object.corner_btn', text='7').btn_id = 'btn_c7'
+        row12.operator('object.corner_btn', text='0').btn_id = 'btn_c0'
+        row12.operator('object.corner_btn', text='1').btn_id = 'btn_c1'
+        row12.operator('object.corner_btn', text='2').btn_id = 'btn_c2'
+        row12.operator('object.corner_btn', text='3').btn_id = 'btn_c3'
         
         row13 = layout.grid_flow(columns=4, row_major=True, align=True)
         row13.scale_y = 1.0
@@ -153,12 +148,12 @@ class SUBPANEL_PT_PivotToCenters (Panel):
 
         row21 = layout.grid_flow(columns=4, row_major=True, align=True)
         row21.scale_y = 1.0
-        row21.operator(FC3.bl_idname, text='3')
-        row21.operator(FC4.bl_idname, text='4')
-        row21.operator(FC5.bl_idname, text='5')
-        row21.operator(FC0.bl_idname, text='0')
-        row21.operator(FC1.bl_idname, text='1')
-        row21.operator(FC2.bl_idname, text='2')
+        row21.operator('object.center_btn', text='3').btn_id = 'btn_fc3'
+        row21.operator('object.center_btn', text='4').btn_id = 'btn_fc4'
+        row21.operator('object.center_btn', text='5').btn_id = 'btn_fc5'
+        row21.operator('object.center_btn', text='0').btn_id = 'btn_fc0'
+        row21.operator('object.center_btn', text='1').btn_id = 'btn_fc1'
+        row21.operator('object.center_btn', text='2').btn_id = 'btn_fc2'
 
         row23 = layout.row(align=True)
         row23.scale_y = 1.0
