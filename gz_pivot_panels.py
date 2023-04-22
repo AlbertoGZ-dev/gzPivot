@@ -23,7 +23,6 @@ class OBJECT_PT_MyPanel (Panel):
     bl_category = 'GZ Pivot'  # note: replaced by preferences-setting in register function 
     bl_context = 'objectmode'
    
-    
     # def __init(self):
     #     super( self, Panel ).__init__()
     #     bl_category = bpy.context.preferences.addons[__name__].preferences.category 
@@ -31,8 +30,7 @@ class OBJECT_PT_MyPanel (Panel):
     # @classmethod
     # def poll(self,context):
     #     return context.object is not None
-
-    
+  
     def draw(self, context):
         layout = self.layout
         layout.scale_x = 10
@@ -44,19 +42,25 @@ class OBJECT_PT_MyPanel (Panel):
         row1.prop(mytool, 'transformOri', expand=True)
         
         row2 = layout.grid_flow(columns=1, row_major=True, align=True)
-        row2.operator(ClearSRL.bl_idname, text='Center to World')
+        row2.operator('btn.reset_location', text='Center to World')
 
         row3 = layout.row()
         row3.label(text='Show:')
 
         row4 = layout.grid_flow(columns=1, row_major=True, align=True)
-        row4.operator(showBBoxBtn.bl_idname, text='Bounding Box', depress=GlobalsMain.bbox_btn_depress)
+        row4.operator('btn.show_bbox', text='Bounding Box', depress=GlobalsMain.bbox_btn_depress)
+
+        row5a = layout.row()
+        row5a.label(text='Show Points ID:')
 
         row5 = layout.grid_flow(columns=1, row_major=True, align=True)
-        row5.operator(showCornerPointsBtn.bl_idname, text='Corner Points ID', depress=GlobalsMain.cornerpoints_btn_depress)
+        row5.operator('btn.show_cornerpoints', text='Corners', depress=GlobalsMain.cornerpoints_btn_depress)
 
         row6 = layout.grid_flow(columns=1, row_major=True, align=True)
-        row6.operator(showCenterPointsBtn.bl_idname, text='Center Points ID', depress=GlobalsMain.centerpoints_btn_depress)
+        row6.operator('btn.show_centerpoints', text='Face Centers', depress=GlobalsMain.centerpoints_btn_depress)
+
+        row7 = layout.grid_flow(columns=1, row_major=True, align=True)
+        row7.operator('btn.show_midpoints', text='Middle Edges', depress=GlobalsMain.midpoints_btn_depress)
         
 
  
@@ -67,7 +71,6 @@ class SUBPANEL_PT_PivotToCorners (Panel):
     bl_space_type = 'VIEW_3D'
     bl_region_type = 'UI'
     bl_parent_id = 'OBJECT_PT_MyPanel'
-    
     
     def draw(self, context):
         layout = self.layout
@@ -95,14 +98,14 @@ class SUBPANEL_PT_PivotToCorners (Panel):
         
         row12 = layout.grid_flow(columns=4, row_major=True, align=True)
         row12.scale_y = 1.0
-        row12.operator('object.corner_btn', text='4').btn_id = 'btn_c4'
-        row12.operator('object.corner_btn', text='5').btn_id = 'btn_c5'
-        row12.operator('object.corner_btn', text='6').btn_id = 'btn_c6'
-        row12.operator('object.corner_btn', text='7').btn_id = 'btn_c7'
-        row12.operator('object.corner_btn', text='0').btn_id = 'btn_c0'
-        row12.operator('object.corner_btn', text='1').btn_id = 'btn_c1'
-        row12.operator('object.corner_btn', text='2').btn_id = 'btn_c2'
-        row12.operator('object.corner_btn', text='3').btn_id = 'btn_c3'
+        row12.operator('btn.corners', text='4').btn_id = 'btn_c4'
+        row12.operator('btn.corners', text='5').btn_id = 'btn_c5'
+        row12.operator('btn.corners', text='6').btn_id = 'btn_c6'
+        row12.operator('btn.corners', text='7').btn_id = 'btn_c7'
+        row12.operator('btn.corners', text='0').btn_id = 'btn_c0'
+        row12.operator('btn.corners', text='1').btn_id = 'btn_c1'
+        row12.operator('btn.corners', text='2').btn_id = 'btn_c2'
+        row12.operator('btn.corners', text='3').btn_id = 'btn_c3'
         
         row13 = layout.grid_flow(columns=4, row_major=True, align=True)
         row13.scale_y = 1.0
@@ -110,8 +113,7 @@ class SUBPANEL_PT_PivotToCorners (Panel):
         row13.template_icon(icon_value=corner_1.icon_id, scale=3)
         row13.template_icon(icon_value=corner_2.icon_id, scale=3)
         row13.template_icon(icon_value=corner_3.icon_id, scale=3)
-           
-        
+              
 preview_collections = {}        
         
 
@@ -148,12 +150,12 @@ class SUBPANEL_PT_PivotToCenters (Panel):
 
         row21 = layout.grid_flow(columns=4, row_major=True, align=True)
         row21.scale_y = 1.0
-        row21.operator('object.center_btn', text='3').btn_id = 'btn_fc3'
-        row21.operator('object.center_btn', text='4').btn_id = 'btn_fc4'
-        row21.operator('object.center_btn', text='5').btn_id = 'btn_fc5'
-        row21.operator('object.center_btn', text='0').btn_id = 'btn_fc0'
-        row21.operator('object.center_btn', text='1').btn_id = 'btn_fc1'
-        row21.operator('object.center_btn', text='2').btn_id = 'btn_fc2'
+        row21.operator('btn.centers', text='3').btn_id = 'btn_fc3'
+        row21.operator('btn.centers', text='4').btn_id = 'btn_fc4'
+        row21.operator('btn.centers', text='5').btn_id = 'btn_fc5'
+        row21.operator('btn.centers', text='0').btn_id = 'btn_fc0'
+        row21.operator('btn.centers', text='1').btn_id = 'btn_fc1'
+        row21.operator('btn.centers', text='2').btn_id = 'btn_fc2'
 
         row23 = layout.row(align=True)
         row23.scale_y = 1.0
@@ -163,11 +165,41 @@ class SUBPANEL_PT_PivotToCenters (Panel):
         
         row25 = layout.grid_flow(columns=2, row_major=True, align=True)
         row25.scale_y = 1.0
-        row25.operator(CenterBounds.bl_idname, text='Center (bounds)')
-        row25.operator(CenterMass.bl_idname, text='Center (mass)')
+        row25.operator('btn.center_bounds', text='Center (bounds)')
+        row25.operator('btn.center_mass', text='Center (mass)')
 
 
+
+
+class SUBPANEL_PT_PivotToMidEdges(Panel):
+    bl_idname = 'SUBPANEL_PT_PivotToMidEdges'
+    bl_label = 'Pivot to Middle Edges'
+    bl_space_type = 'VIEW_3D'
+    bl_region_type = 'UI'
+    bl_parent_id = 'OBJECT_PT_MyPanel'
+    
+    def draw(self, context):
+        layout = self.layout
+        scene = context.scene
+        mytool = scene.my_tool
+
+        row10 = layout.grid_flow(columns=4, row_major=True, align=True)
+        row10.scale_y = 1.0
+        row10.operator('btn.mid_edges', text='8').btn_id = 'btn_mid8'
+        row10.operator('btn.mid_edges', text='9').btn_id = 'btn_mid9'
+        row10.operator('btn.mid_edges', text='10').btn_id = 'btn_mid10'
+        row10.operator('btn.mid_edges', text='11').btn_id = 'btn_mid11'
+        row10.operator('btn.mid_edges', text='4').btn_id = 'btn_mid4'
+        row10.operator('btn.mid_edges', text='5').btn_id = 'btn_mid5'
+        row10.operator('btn.mid_edges', text='6').btn_id = 'btn_mid6'
+        row10.operator('btn.mid_edges', text='7').btn_id = 'btn_mid7'
+        row10.operator('btn.mid_edges', text='0').btn_id = 'btn_mid0'
+        row10.operator('btn.mid_edges', text='1').btn_id = 'btn_mid1'
+        row10.operator('btn.mid_edges', text='2').btn_id = 'btn_mid2'
+        row10.operator('btn.mid_edges', text='3').btn_id = 'btn_mid3'
+       
         
+
 
 class SUBPANEL_PT_PivotTo3Dcursor (Panel):
     bl_idname = 'SUBPANEL_PT_PivotTo3Dcursor'
@@ -183,7 +215,7 @@ class SUBPANEL_PT_PivotTo3Dcursor (Panel):
         
         ### Pivot to 3D Cursor
         row41 = layout.grid_flow(columns=4, row_major=True)
-        row41.operator(Cursor.bl_idname, text='3D Cursor')
+        row41.operator('btn.cursor', text='3D Cursor')
         
         
 

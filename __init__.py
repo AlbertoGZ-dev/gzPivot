@@ -33,7 +33,7 @@ from bpy.utils import ( register_class,
 
 from .gz_pivot_main import *
 from .gz_pivot_panels import *
-from .gz_pivot_ops import cornerBtn
+from .gz_pivot_ops import CornersBtn
 
 
 ''''''''''''''''''''''''''''''''''''''''''''''''''''
@@ -47,6 +47,7 @@ classes = (
     OBJECT_PT_MyPanel,
     SUBPANEL_PT_PivotToCorners,
     SUBPANEL_PT_PivotToCenters,
+    SUBPANEL_PT_PivotToMidEdges,
     SUBPANEL_PT_PivotTo3Dcursor,
     SUBPANEL_PT_About,
     #PREFS_PT_MyPrefs    
@@ -93,17 +94,19 @@ def register():
     #
     bpy.types.Scene.my_tool = PointerProperty(type=PG_MyProperties)
 
-    bpy.utils.register_class(cornerBtn)
-    bpy.utils.register_class(centerBtn)
-    bpy.utils.register_class(CenterBounds)
-    bpy.utils.register_class(CenterMass)
+    bpy.utils.register_class(CornersBtn)
+    bpy.utils.register_class(CentersBtn)
+    bpy.utils.register_class(MidEdgesBtn)
+    bpy.utils.register_class(CenterBoundsBtn)
+    bpy.utils.register_class(CenterMassBtn)
     
-    bpy.utils.register_class(Cursor)
-    bpy.utils.register_class(ClearSRL)
+    bpy.utils.register_class(CursorBtn)
+    bpy.utils.register_class(ResetLocationBtn)
 
-    bpy.utils.register_class(showBBoxBtn)
-    bpy.utils.register_class(showCornerPointsBtn)
-    bpy.utils.register_class(showCenterPointsBtn)
+    bpy.utils.register_class(ShowBBoxBtn)
+    bpy.utils.register_class(ShowCornerPointsBtn)
+    bpy.utils.register_class(ShowCenterPointsBtn)
+    bpy.utils.register_class(ShowMidEdgesBtn)
 
    
 
@@ -114,18 +117,20 @@ def unregister():
     #
     del bpy.types.Scene.my_tool  # remove PG_MyProperties
 
-    bpy.utils.unregister_class(cornerBtn)
-    bpy.utils.unregister_class(centerBtn)
+    bpy.utils.unregister_class(CornersBtn)
+    bpy.utils.unregister_class(CentersBtn)
+    bpy.utils.unregister_class(MidEdgesBtn)
+    bpy.utils.unregister_class(CenterBoundsBtn)
+    bpy.utils.unregister_class(CenterMassBtn)
     
-    bpy.utils.unregister_class(CenterBounds)
-    bpy.utils.unregister_class(CenterMass)
-    
-    bpy.utils.unregister_class(Cursor)
-    bpy.utils.unregister_class(ClearSRL)
+    bpy.utils.unregister_class(CursorBtn)
+    bpy.utils.unregister_class(ResetLocationBtn)
 
-    bpy.utils.unregister_class(showBBoxBtn)
-    bpy.utils.unregister_class(showCornerPointsBtn)
-    bpy.utils.unregister_class(showCenterPointsBtn)
+    bpy.utils.unregister_class(ShowBBoxBtn)
+    bpy.utils.unregister_class(ShowCornerPointsBtn)
+    bpy.utils.unregister_class(ShowCenterPointsBtn)
+    bpy.utils.unregister_class(ShowMidEdgesBtn)
+
 
 
     for pcoll in preview_collections.values():
