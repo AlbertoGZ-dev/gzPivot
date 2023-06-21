@@ -182,21 +182,70 @@ class SUBPANEL_PT_PivotToMidEdges(Panel):
         layout = self.layout
         scene = context.scene
         mytool = scene.my_tool
+        pcoll = preview_collections['main']
 
-        row10 = layout.grid_flow(columns=4, row_major=True, align=True)
-        row10.scale_y = 1.0
-        row10.operator('btn.mid_edges', text='8').btn_id = 'btn_mid8'
-        row10.operator('btn.mid_edges', text='9').btn_id = 'btn_mid9'
-        row10.operator('btn.mid_edges', text='10').btn_id = 'btn_mid10'
-        row10.operator('btn.mid_edges', text='11').btn_id = 'btn_mid11'
-        row10.operator('btn.mid_edges', text='4').btn_id = 'btn_mid4'
-        row10.operator('btn.mid_edges', text='5').btn_id = 'btn_mid5'
-        row10.operator('btn.mid_edges', text='6').btn_id = 'btn_mid6'
-        row10.operator('btn.mid_edges', text='7').btn_id = 'btn_mid7'
-        row10.operator('btn.mid_edges', text='0').btn_id = 'btn_mid0'
-        row10.operator('btn.mid_edges', text='1').btn_id = 'btn_mid1'
-        row10.operator('btn.mid_edges', text='2').btn_id = 'btn_mid2'
-        row10.operator('btn.mid_edges', text='3').btn_id = 'btn_mid3'
+        ### Icons collection
+        mid_edge_0 = pcoll['mid_edge_0']
+        mid_edge_1 = pcoll['mid_edge_1']
+        mid_edge_2 = pcoll['mid_edge_2']
+        mid_edge_3 = pcoll['mid_edge_3']
+        mid_edge_4 = pcoll['mid_edge_4']
+        mid_edge_5 = pcoll['mid_edge_5']
+        mid_edge_6 = pcoll['mid_edge_6']
+        mid_edge_7 = pcoll['mid_edge_7']
+        mid_edge_8 = pcoll['mid_edge_8']
+        mid_edge_9 = pcoll['mid_edge_9']
+        mid_edge_10 = pcoll['mid_edge_10']
+        mid_edge_11 = pcoll['mid_edge_11']
+
+        ### Pivot to Mid Edges (Layout Items)
+        row35 = layout.grid_flow(columns=4, row_major=True, align=True)
+        row35.scale_y = 1.0
+        row35.template_icon(icon_value=mid_edge_8.icon_id, scale=2.5)
+        row35.template_icon(icon_value=mid_edge_9.icon_id, scale=2.5)
+        row35.template_icon(icon_value=mid_edge_10.icon_id, scale=2.5)
+        row35.template_icon(icon_value=mid_edge_11.icon_id, scale=2.5)
+
+        row34 = layout.grid_flow(columns=4, row_major=True, align=True)
+        row34.scale_y = 1.0
+        row34.operator('btn.mid_edges', text='8').btn_id = 'btn_mid8'
+        row34.operator('btn.mid_edges', text='9').btn_id = 'btn_mid9'
+        row34.operator('btn.mid_edges', text='10').btn_id = 'btn_mid10'
+        row34.operator('btn.mid_edges', text='11').btn_id = 'btn_mid11'
+
+        layout.separator(factor=2.0)
+        row33 = layout.grid_flow(columns=4, row_major=True, align=True)
+        row33.scale_y = 1.0
+        row33.template_icon(icon_value=mid_edge_4.icon_id, scale=2.5)
+        row33.template_icon(icon_value=mid_edge_5.icon_id, scale=2.5)
+        row33.template_icon(icon_value=mid_edge_6.icon_id, scale=2.5)
+        row33.template_icon(icon_value=mid_edge_7.icon_id, scale=2.5)
+
+        row32 = layout.grid_flow(columns=4, row_major=True, align=True)
+        row32.scale_y = 1.0
+        row32.operator('btn.mid_edges', text='4').btn_id = 'btn_mid4'
+        row32.operator('btn.mid_edges', text='5').btn_id = 'btn_mid5'
+        row32.operator('btn.mid_edges', text='6').btn_id = 'btn_mid6'
+        row32.operator('btn.mid_edges', text='7').btn_id = 'btn_mid7'
+        
+        layout.separator(factor=2.0)
+        row31 = layout.grid_flow(columns=4, row_major=True, align=True)
+        row31.scale_y = 1.0
+        row31.template_icon(icon_value=mid_edge_0.icon_id, scale=2.5)
+        row31.template_icon(icon_value=mid_edge_1.icon_id, scale=2.5)
+        row31.template_icon(icon_value=mid_edge_2.icon_id, scale=2.5)
+        row31.template_icon(icon_value=mid_edge_3.icon_id, scale=2.5)
+
+        row30 = layout.grid_flow(columns=4, row_major=True, align=True)
+        row30.scale_y = 1.0
+        row30.operator('btn.mid_edges', text='0').btn_id = 'btn_mid0'
+        row30.operator('btn.mid_edges', text='1').btn_id = 'btn_mid1'
+        row30.operator('btn.mid_edges', text='2').btn_id = 'btn_mid2'
+        row30.operator('btn.mid_edges', text='3').btn_id = 'btn_mid3'
+
+        
+      
+        
        
         
 
@@ -236,18 +285,19 @@ class SUBPANEL_PT_About (Panel):
         ### About
         row90 = layout.row(align=True)
         row90.alignment = 'CENTER'
-        row90.label(text='GZ Pivot v0.1.1')
+        row90.label(text='GZ Pivot v0.1.2')
 
         row91 = layout.row(align=True)
         row91.alignment = 'CENTER'
         row91.label(text='by Alberto GZ')
         row91.separator()
-        #
+        
         row92 = layout.row(align=True)
+        row92.alignment = 'CENTER'
         text = 'GZ Privot helps to set origin on objects in easy and quick way'      
         
         def label_multiline(context, text, parent):
-            chars = int(context.region.width / 13)
+            chars = int(context.region.width / 8.5)
             wrapper = textwrap.TextWrapper(width=chars)
             text_lines = wrapper.wrap(text=text)
             for text_line in text_lines:

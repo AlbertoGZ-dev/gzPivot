@@ -16,7 +16,7 @@ bl_info = {
     'author' : 'AlbertoGZ',
     'description' : 'Set origin to objects in easy and quick way.',
     'blender' : (2, 80, 0),
-    'version' : (0, 1, 1),
+    'version' : (0, 1, 2),
     'location' : 'View3D',
     'warning' : '',
     'category' : 'Object'
@@ -50,7 +50,18 @@ classes = (
     SUBPANEL_PT_PivotToMidEdges,
     SUBPANEL_PT_PivotTo3Dcursor,
     SUBPANEL_PT_About,
-    #PREFS_PT_MyPrefs    
+    #PREFS_PT_MyPrefs,
+    CornersBtn,
+    CentersBtn,
+    MidEdgesBtn,
+    CenterBoundsBtn,
+    CenterMassBtn,
+    CursorBtn,
+    ResetLocationBtn,
+    ShowBBoxBtn,
+    ShowCornerPointsBtn,
+    ShowCenterPointsBtn,
+    ShowMidEdgesBtn
 )
 
 
@@ -58,7 +69,9 @@ classes = (
 def register():
     import bpy.utils.previews
     pcoll = bpy.utils.previews.new()
-
+    preview_collections['main'] = pcoll
+    
+    
     # Path to the folder where the icons are.
     # The path is calculated relative to this py file inside the addon folder
     script_path = os.path.abspath(__file__) 
@@ -85,52 +98,37 @@ def register():
     pcoll.load('face_center_3', os.path.join(icons_dir, 'face_center_3.png'), 'IMAGE')
     pcoll.load('face_center_4', os.path.join(icons_dir, 'face_center_4.png'), 'IMAGE')
     pcoll.load('face_center_5', os.path.join(icons_dir, 'face_center_5.png'), 'IMAGE')
+
+    pcoll.load('mid_edge_0', os.path.join(icons_dir, 'mid_edge_0.png'), 'IMAGE')
+    pcoll.load('mid_edge_1', os.path.join(icons_dir, 'mid_edge_1.png'), 'IMAGE')
+    pcoll.load('mid_edge_2', os.path.join(icons_dir, 'mid_edge_2.png'), 'IMAGE')
+    pcoll.load('mid_edge_3', os.path.join(icons_dir, 'mid_edge_3.png'), 'IMAGE')
+    pcoll.load('mid_edge_4', os.path.join(icons_dir, 'mid_edge_4.png'), 'IMAGE')
+    pcoll.load('mid_edge_5', os.path.join(icons_dir, 'mid_edge_5.png'), 'IMAGE')
+    pcoll.load('mid_edge_6', os.path.join(icons_dir, 'mid_edge_6.png'), 'IMAGE')
+    pcoll.load('mid_edge_7', os.path.join(icons_dir, 'mid_edge_7.png'), 'IMAGE')
+    pcoll.load('mid_edge_8', os.path.join(icons_dir, 'mid_edge_8.png'), 'IMAGE')
+    pcoll.load('mid_edge_9', os.path.join(icons_dir, 'mid_edge_9.png'), 'IMAGE')
+    pcoll.load('mid_edge_10', os.path.join(icons_dir, 'mid_edge_10.png'), 'IMAGE')
+    pcoll.load('mid_edge_11', os.path.join(icons_dir, 'mid_edge_11.png'), 'IMAGE')
     
-    preview_collections['main'] = pcoll
     
-    #
+
     for cls in classes:
         register_class(cls)
     #
     bpy.types.Scene.my_tool = PointerProperty(type=PG_MyProperties)
 
-    bpy.utils.register_class(CornersBtn)
-    bpy.utils.register_class(CentersBtn)
-    bpy.utils.register_class(MidEdgesBtn)
-    bpy.utils.register_class(CenterBoundsBtn)
-    bpy.utils.register_class(CenterMassBtn)
     
-    bpy.utils.register_class(CursorBtn)
-    bpy.utils.register_class(ResetLocationBtn)
-
-    bpy.utils.register_class(ShowBBoxBtn)
-    bpy.utils.register_class(ShowCornerPointsBtn)
-    bpy.utils.register_class(ShowCenterPointsBtn)
-    bpy.utils.register_class(ShowMidEdgesBtn)
 
    
 
 def unregister():
-    #
+    
     for cls in reversed(classes):
         unregister_class(cls)
     #
     del bpy.types.Scene.my_tool  # remove PG_MyProperties
-
-    bpy.utils.unregister_class(CornersBtn)
-    bpy.utils.unregister_class(CentersBtn)
-    bpy.utils.unregister_class(MidEdgesBtn)
-    bpy.utils.unregister_class(CenterBoundsBtn)
-    bpy.utils.unregister_class(CenterMassBtn)
-    
-    bpy.utils.unregister_class(CursorBtn)
-    bpy.utils.unregister_class(ResetLocationBtn)
-
-    bpy.utils.unregister_class(ShowBBoxBtn)
-    bpy.utils.unregister_class(ShowCornerPointsBtn)
-    bpy.utils.unregister_class(ShowCenterPointsBtn)
-    bpy.utils.unregister_class(ShowMidEdgesBtn)
-
 
 
     for pcoll in preview_collections.values():

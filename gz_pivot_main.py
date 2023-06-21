@@ -3,9 +3,6 @@ import bpy
 import functools
 import re
 
-from bpy.utils import ( register_class, 
-                        unregister_class
-                        )
                         
 from bpy.props import ( StringProperty,
                         BoolProperty,
@@ -96,6 +93,7 @@ class GlobalsMain():
     centerpoints_btn_depress = False
     midpoints_btn_depress = False
     white = (1.0, 1.0, 1.0)
+    black = (0.0, 0.0, 0.0)
     red = (1.0, 0.1, 0.2)
     green = (0.0, 1.0, 0.0)
     blue = (0.1, 0.3, 1.0)
@@ -158,10 +156,11 @@ def main():
 
         c = main.corners            
         main.midEdges = {
+            # Middle Edges World
             'MID0': ( (c['CW0'][0]+c['CW1'][0])/2, (c['CW0'][1]+c['CW1'][1])/2, (c['CW0'][2]+c['CW1'][2])/2 ),
             'MID1': ( (c['CW1'][0]+c['CW2'][0])/2, (c['CW1'][1]+c['CW2'][1])/2, (c['CW1'][2]+c['CW2'][2])/2 ),
             'MID2': ( (c['CW2'][0]+c['CW3'][0])/2, (c['CW2'][1]+c['CW3'][1])/2, (c['CW2'][2]+c['CW3'][2])/2 ),
-            'MID3': ( (c['CW3'][0]+c['CW0'][0])/2, (c['CW3'][1]+c['CW0'][1])/2, (c['CW0'][2]+c['CW0'][2])/2 ),
+            'MID3': ( (c['CW3'][0]+c['CW0'][0])/2, (c['CW3'][1]+c['CW0'][1])/2, (c['CW3'][2]+c['CW0'][2])/2 ),
             
             'MID4': ( (c['CW0'][0]+c['CW4'][0])/2, (c['CW0'][1]+c['CW4'][1])/2, (c['CW0'][2]+c['CW4'][2])/2 ),
             'MID5': ( (c['CW1'][0]+c['CW5'][0])/2, (c['CW1'][1]+c['CW5'][1])/2, (c['CW1'][2]+c['CW5'][2])/2 ),
@@ -172,6 +171,22 @@ def main():
             'MID9': ( (c['CW5'][0]+c['CW6'][0])/2, (c['CW5'][1]+c['CW6'][1])/2, (c['CW5'][2]+c['CW6'][2])/2 ),
             'MID10': ( (c['CW6'][0]+c['CW7'][0])/2, (c['CW6'][1]+c['CW7'][1])/2, (c['CW6'][2]+c['CW7'][2])/2 ),
             'MID11': ( (c['CW7'][0]+c['CW4'][0])/2, (c['CW7'][1]+c['CW4'][1])/2, (c['CW7'][2]+c['CW4'][2])/2 ),
+
+            # Middle Edges Local
+            'MIDL0': ( (c['CL0'][0]+c['CL1'][0])/2, (c['CL0'][1]+c['CL1'][1])/2, (c['CL0'][2]+c['CL1'][2])/2 ),
+            'MIDL1': ( (c['CL1'][0]+c['CL2'][0])/2, (c['CL1'][1]+c['CL2'][1])/2, (c['CL1'][2]+c['CL2'][2])/2 ),
+            'MIDL2': ( (c['CL2'][0]+c['CL3'][0])/2, (c['CL2'][1]+c['CL3'][1])/2, (c['CL2'][2]+c['CL3'][2])/2 ),
+            'MIDL3': ( (c['CL3'][0]+c['CL0'][0])/2, (c['CL3'][1]+c['CL0'][1])/2, (c['CL3'][2]+c['CL0'][2])/2 ),
+            
+            'MIDL4': ( (c['CL0'][0]+c['CL4'][0])/2, (c['CL0'][1]+c['CL4'][1])/2, (c['CL0'][2]+c['CL4'][2])/2 ),
+            'MIDL5': ( (c['CL1'][0]+c['CL5'][0])/2, (c['CL1'][1]+c['CL5'][1])/2, (c['CL1'][2]+c['CL5'][2])/2 ),
+            'MIDL6': ( (c['CL2'][0]+c['CL6'][0])/2, (c['CL2'][1]+c['CL6'][1])/2, (c['CL2'][2]+c['CL6'][2])/2 ),
+            'MIDL7': ( (c['CL3'][0]+c['CL7'][0])/2, (c['CL3'][1]+c['CL7'][1])/2, (c['CL3'][2]+c['CL7'][2])/2 ),
+
+            'MIDL8': ( (c['CL4'][0]+c['CL5'][0])/2, (c['CL4'][1]+c['CL5'][1])/2, (c['CL4'][2]+c['CL5'][2])/2 ),
+            'MIDL9': ( (c['CL5'][0]+c['CL6'][0])/2, (c['CL5'][1]+c['CL6'][1])/2, (c['CL5'][2]+c['CL6'][2])/2 ),
+            'MIDL10': ( (c['CL6'][0]+c['CL7'][0])/2, (c['CL6'][1]+c['CL7'][1])/2, (c['CL6'][2]+c['CL7'][2])/2 ),
+            'MIDL11': ( (c['CL7'][0]+c['CL4'][0])/2, (c['CL7'][1]+c['CL4'][1])/2, (c['CL7'][2]+c['CL4'][2])/2 ),
         }
 
 
@@ -493,7 +508,8 @@ def pivotMarker(x, color):
       
     
 
-
+### CORNERS
+#
 def createCornerPointsId(self):
     active_obj = bpy.context.active_object
 
@@ -517,7 +533,7 @@ def createCornerPointsId(self):
         name.matrix_parent_inverse = active_obj.matrix_world.inverted()
 
     # Set wirecolor to custom color
-    bpy.context.preferences.themes[0].view_3d.empty = (0.0, 1.0, 1.0)
+    bpy.context.preferences.themes[0].view_3d.empty = GlobalsMain.cyan
 
     # Hide relationship lines
     bpy.context.space_data.overlay.show_relationship_lines = False
@@ -532,7 +548,7 @@ def deleteCornerPointsId(self):
     bpy.data.collections.remove(collection)
     
     # Set wirecolor to default color
-    bpy.context.preferences.themes[0].view_3d.empty = (0.0, 0.0, 0.0)
+    bpy.context.preferences.themes[0].view_3d.empty = GlobalsMain.black
 
 
 
@@ -553,6 +569,10 @@ def showCornerPointsId(self, context):
             
 
 
+
+
+### FACES CENTER
+#
 def createFaceCenterPointsId(self):
     active_obj = bpy.context.active_object
 
@@ -565,7 +585,7 @@ def createFaceCenterPointsId(self):
         name = ('FCL'+str(i))
         loc = main.centers['FCL'+str(i)]
         # Template for Empty 
-        name = bpy.data.objects.new('C'+str(i)+' ', None) #Name of empty obj
+        name = bpy.data.objects.new('Face Center '+str(i)+' ', None) #Name of empty obj
         bpy.data.collections['FaceCentersColl'].objects.link( name )
         name.empty_display_size = 0.005
         name.empty_display_type = 'SPHERE'
@@ -576,7 +596,7 @@ def createFaceCenterPointsId(self):
         name.matrix_parent_inverse = active_obj.matrix_world.inverted()
     
     # Set wirecolor to custom color
-    bpy.context.preferences.themes[0].view_3d.empty = (0.0, 1.0, 1.0)
+    bpy.context.preferences.themes[0].view_3d.empty = GlobalsMain.cyan
 
     # Hide relationship lines
     bpy.context.space_data.overlay.show_relationship_lines = False
@@ -592,7 +612,7 @@ def deleteFaceCenterPointsId(self):
     bpy.data.collections.remove(collection)
     
     # Set wirecolor to default color
-    bpy.context.preferences.themes[0].view_3d.empty = (0.0, 0.0, 0.0)
+    bpy.context.preferences.themes[0].view_3d.empty = GlobalsMain.black
     
 
 
@@ -612,7 +632,11 @@ def showFaceCenterPointsId(self, context):
 
             
 
-####
+
+
+
+### MID EDGES
+#
 def createMidEdgesPointsId(self):
     active_obj = bpy.context.active_object
 
@@ -623,9 +647,9 @@ def createMidEdgesPointsId(self):
     for i in range(0, 12):
         main()
         name = ('MID'+str(i))
-        loc = main.midEdges['MID'+str(i)]
+        loc = main.midEdges['MIDL'+str(i)]
         # Template for Empty 
-        name = bpy.data.objects.new('M'+str(i)+' ', None) #Name of empty obj
+        name = bpy.data.objects.new('Middle Edge '+str(i)+' ', None) #Name of empty obj
         bpy.data.collections['MidEdgesColl'].objects.link( name )
         name.empty_display_size = 0.005
         name.empty_display_type = 'SPHERE'
@@ -636,7 +660,7 @@ def createMidEdgesPointsId(self):
         name.matrix_parent_inverse = active_obj.matrix_world.inverted()
     
     # Set wirecolor to custom color
-    bpy.context.preferences.themes[0].view_3d.empty = (0.0, 1.0, 1.0)
+    bpy.context.preferences.themes[0].view_3d.empty = GlobalsMain.cyan
 
     # Hide relationship lines
     bpy.context.space_data.overlay.show_relationship_lines = False
@@ -652,7 +676,7 @@ def deleteMidEdgesPointsId(self):
     bpy.data.collections.remove(collection)
     
     # Set wirecolor to default color
-    bpy.context.preferences.themes[0].view_3d.empty = (0.0, 0.0, 0.0)
+    bpy.context.preferences.themes[0].view_3d.empty = GlobalsMain.black
     
 
 
@@ -662,13 +686,13 @@ def showMidEdgesPointsId(self, context):
  
     if checkSelected(self) == 'VALID':
 
-        if GlobalsMain.centerpoints_btn_depress == False:
+        if GlobalsMain.midpoints_btn_depress == False:
             createMidEdgesPointsId(self)
-            GlobalsMain.centerpoints_btn_depress = True
+            GlobalsMain.midpoints_btn_depress = True
             
-        elif GlobalsMain.centerpoints_btn_depress == True:
+        elif GlobalsMain.midpoints_btn_depress == True:
             deleteMidEdgesPointsId(self)
-            GlobalsMain.centerpoints_btn_depress = False
+            GlobalsMain.midpoints_btn_depress = False
 
 
 
